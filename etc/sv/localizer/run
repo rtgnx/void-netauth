@@ -1,0 +1,4 @@
+#!/bin/sh
+
+sleep 60
+exec /usr/sbin/localize --min-gid 1000 --min-uid 1000

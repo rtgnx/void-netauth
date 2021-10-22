@@ -1,0 +1,16 @@
+{
+  "CN": "NetAuth CA",
+  "key": {
+    "algo": "rsa",
+    "size": 2048
+  },
+  "names": [
+    {
+      "C": "GB",
+      "L": "Location",
+      "O": "Org",
+      "OU": "Identity Management",
+      "ST": "State"
+    }
+ ]
+}

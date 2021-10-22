@@ -1,0 +1,38 @@
+[core]
+  home = "/var/lib/netauth"
+  server = "localhost"
+
+[crypto]
+  backend = "bcrypt"
+
+  [crypto.bcrypt]
+    cost = 15
+
+[db]
+  backend = "filesystem"
+
+[log]
+  level = "INFO"
+
+[pdb]
+  watch-interval = "1s"
+  watcher = false
+
+[plugin]
+  path = "plugins"
+
+[server]
+  bind = "0.0.0.0"
+  port = 1729
+
+[tls]
+  certificate = "/etc/netauth/keys/tls.pem"
+  key = "/etc/netauth/keys/tls.key"
+
+[token]
+  backend = "jwt-rsa"
+  lifetime = "10m0s"
+
+  [token.jwt]
+    bits = 4096
+    generate = true

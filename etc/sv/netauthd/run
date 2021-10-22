@@ -1,0 +1,34 @@
+#!/bin/sh
+
+[ -r ./conf ] && . ./conf
+
+
+if [ ! -f "/etc/netauth/keys/tls.key" ]; then
+  # Generate self signed tls
+
+  cd /etc/netauth/keys || exit 1
+  cfssl gencert -initca CA.json | cfssljson -bare ca && \
+    cfssl gencert -ca ca.pem -ca-key ca-key.pem \
+  	-config profile.json -profile=peer localhost.json | cfssljson -bare netauth
+  
+  mv netauth-key.pem tls.key && mv netauth.pem tls.pem
+
+fi
+
+cd /var/lib/netauth/ || exit 1
+
+chown -R _netauth:_netauth /etc/netauth /var/lib/netauth
+
+chmod 0640 /etc/netauth/keys/tls.key
+chmod 0640 /etc/netauth/keys/tls.pem
+chmod 0644 /etc/netauth/config.toml
+
+chmod 0755 /etc/netauth /etc/netauth/keys
+
+
+if [ ! -d "/var/lib/netauth/kv" ]; then
+  # If db is uninitialised, bootstrap server with credentials admin:admin
+  exec chpst -u _netauth:_netauth netauthd --server.bootstrap "admin:admin" 2>&1
+else
+  exec chpst -u _netauth:_netauth netauthd 2>&1
+fi
